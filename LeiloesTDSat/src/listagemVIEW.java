@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -20,7 +21,26 @@ public class listagemVIEW extends javax.swing.JFrame {
         initComponents();
         listarProdutos();
     }
+private void listarProdutos() {
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
 
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setRowCount(0); // Limpa a tabela antes de adicionar novos dados
+
+            for (ProdutosDTO produto : listagem) {
+                model.addRow(new Object[]{
+                    produto.getId(),
+                    produto.getNome(),
+                    produto.getValor(),
+                    produto.getStatus()
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar produtos: " + e.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
